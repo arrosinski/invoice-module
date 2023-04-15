@@ -1,0 +1,72 @@
+{
+	"info": {
+		"_postman_id": "8d16a2fd-c53d-466f-b0fc-42ebe1641a8e",
+		"name": "Ingenious",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10221304"
+	},
+	"item": [
+		{
+			"name": "Invoice Show",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/invoices/0186e0a7-c3a6-4127-a92f-58c24fe45df1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"invoices",
+						"0186e0a7-c3a6-4127-a92f-58c24fe45df1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Approve Invoice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/invoices/37fcdcd4-3de7-4017-b7cc-40f4d5c2898f/approve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"invoices",
+						"37fcdcd4-3de7-4017-b7cc-40f4d5c2898f",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reject Invoice",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/api/invoices/37fcdcd4-3de7-4017-b7cc-40f4d5c2898f/reject",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"api",
+						"invoices",
+						"37fcdcd4-3de7-4017-b7cc-40f4d5c2898f",
+						"reject"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
