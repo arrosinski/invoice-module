@@ -1,8 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -41,10 +47,30 @@ class Handler extends ExceptionHandler
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(
+            static function (Throwable $throwable, Request $request): ?JsonResponse {
+                if (!$request->is('api/*')) {
+                    return null;
+                }
+
+                $statusCode = $throwable instanceof HttpExceptionInterface
+                    ? $throwable->getStatusCode()
+                    : Response::HTTP_INTERNAL_SERVER_ERROR;
+
+                return response()->json(
+                    [
+                        'message' => $throwable->getMessage(),
+                        'data' => null,
+                    ],
+                    $statusCode
+                );
+            }
+        );
     }
 }
