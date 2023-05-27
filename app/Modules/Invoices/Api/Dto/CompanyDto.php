@@ -16,8 +16,8 @@ final readonly class CompanyDto implements DtoInterface
         public string $zip,
         public string $phone,
         public string $email,
-        public ?\DateTimeInterface $createdAt,
-        public ?\DateTimeInterface $updatedAt,
+        public ?\DateTimeInterface $createdAt = null,
+        public ?\DateTimeInterface $updatedAt = null,
     ) {
     }
 }

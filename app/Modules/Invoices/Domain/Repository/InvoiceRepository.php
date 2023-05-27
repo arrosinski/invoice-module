@@ -46,8 +46,8 @@ final readonly class InvoiceRepository implements InvoiceRepositoryInterface
                 'price',
                 'currency',
                 'quantity',
-                'products.created_at',
-                'products.updated_at',
+                'products.created_at AS createdAt',
+                'products.updated_at AS updatedAt',
             )->join('products', 'product_id', '=', 'products.id')
             ->where('invoice_id', $id->toString())
             ->get();
@@ -76,8 +76,8 @@ final readonly class InvoiceRepository implements InvoiceRepositoryInterface
                 'zip',
                 'phone',
                 'email',
-                'companies.created_at',
-                'companies.updated_at',
+                'companies.created_at AS createdAt',
+                'companies.updated_at AS updatedAt',
             )->join('companies', 'company_id', '=', 'companies.id')
             ->where('invoices.id', $id->toString())
             ->first();

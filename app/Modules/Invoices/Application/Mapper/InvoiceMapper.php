@@ -32,8 +32,8 @@ final class InvoiceMapper implements
             $raw->company,
             StatusEnum::tryFrom($raw->status),
             $raw->products,
-            new \DateTimeImmutable($raw->created_at),
-            new \DateTimeImmutable($raw->updated_at),
+            isset($raw->created_at) ? new \DateTimeImmutable($raw->created_at) : null,
+            isset($raw->updated_at) ? new \DateTimeImmutable($raw->updated_at) : null,
         );
     }
 

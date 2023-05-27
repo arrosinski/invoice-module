@@ -16,8 +16,8 @@ final class Product implements EntityInterface
         private CurrencyEnum $currency,
         private int $price,
         private int $quantity,
-        private readonly ?\DateTimeInterface $createdAt,
-        private readonly ?\DateTimeInterface $updatedAt,
+        private readonly ?\DateTimeInterface $createdAt = null,
+        private readonly ?\DateTimeInterface $updatedAt = null,
     ) {
     }
 

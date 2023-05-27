@@ -16,8 +16,8 @@ final class Company implements EntityInterface
         private string $zip,
         private string $phone,
         private string $email,
-        private readonly ?\DateTimeInterface $createdAt,
-        private readonly ?\DateTimeInterface $updatedAt,
+        private readonly ?\DateTimeInterface $createdAt = null,
+        private readonly ?\DateTimeInterface $updatedAt = null,
     ) {
     }
 

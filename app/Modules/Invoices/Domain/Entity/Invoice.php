@@ -19,8 +19,8 @@ final class Invoice implements EntityInterface
         private Company $company,
         private StatusEnum $status,
         private TypedCollectionInterface $products,
-        private readonly ?\DateTimeInterface $createdAt,
-        private readonly ?\DateTimeInterface $updatedAt,
+        private readonly ?\DateTimeInterface $createdAt = null,
+        private readonly ?\DateTimeInterface $updatedAt = null,
     ) {
     }
 

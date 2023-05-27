@@ -18,8 +18,8 @@ final readonly class ProductDto implements DtoInterface
         public int $quantity,
         public int $total,
         public string $totalFormatted,
-        public ?\DateTimeInterface $createdAt,
-        public ?\DateTimeInterface $updatedAt,
+        public ?\DateTimeInterface $createdAt = null,
+        public ?\DateTimeInterface $updatedAt = null,
     ) {
     }
 }

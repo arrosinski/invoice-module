@@ -24,8 +24,8 @@ final class ProductMapper implements EntityMapperInterface, DtoMapperInterface, 
             CurrencyEnum::tryFrom($raw->currency),
             $raw->price,
             $raw->quantity,
-            new \DateTimeImmutable($raw->created_at),
-            new \DateTimeImmutable($raw->updated_at),
+            isset($raw->createdAt) ? new \DateTimeImmutable($raw->createdAt) : null,
+            isset($raw->updatedAt) ? new \DateTimeImmutable($raw->updatedAt) : null,
         );
     }
 

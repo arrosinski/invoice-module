@@ -25,8 +25,8 @@ final class CompanyMapper implements EntityMapperInterface, DtoMapperInterface, 
             $raw->zip,
             $raw->phone,
             $raw->email,
-            new \DateTimeImmutable($raw->created_at),
-            new \DateTimeImmutable($raw->updated_at),
+            isset($raw->createdAt) ? new \DateTimeImmutable($raw->createdAt) : null,
+            isset($raw->updatedAt) ? new \DateTimeImmutable($raw->updatedAt) : null,
         );
     }
 
