@@ -20,8 +20,8 @@ final readonly class InvoiceDto implements DtoInterface
         public TypedCollectionInterface $products,
         public int $total,
         public string $totalFormatted,
-        public ?\DateTimeInterface $createdAt,
-        public ?\DateTimeInterface $updatedAt,
+        public ?\DateTimeInterface $createdAt = null,
+        public ?\DateTimeInterface $updatedAt = null,
     ) {
     }
 }

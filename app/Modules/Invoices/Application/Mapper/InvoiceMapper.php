@@ -11,6 +11,7 @@ use App\Modules\Invoices\Api\Dto\ProductDto;
 use App\Modules\Invoices\Domain\Entity\EntityInterface;
 use App\Modules\Invoices\Domain\Entity\Invoice;
 use App\Modules\Invoices\Domain\Entity\Product;
+use EduardoMarques\TypedCollections\TypedCollectionImmutable;
 use Ramsey\Uuid\Uuid;
 
 final class InvoiceMapper implements
@@ -28,12 +29,10 @@ final class InvoiceMapper implements
             Uuid::fromString($raw->id),
             Uuid::fromString($raw->number),
             new \DateTimeImmutable($raw->date),
-            new \DateTimeImmutable($raw->due_date),
-            $raw->company,
+            new \DateTimeImmutable($raw->dueDate),
             StatusEnum::tryFrom($raw->status),
-            $raw->products,
-            isset($raw->created_at) ? new \DateTimeImmutable($raw->created_at) : null,
-            isset($raw->updated_at) ? new \DateTimeImmutable($raw->updated_at) : null,
+            isset($raw->createdAt) ? new \DateTimeImmutable($raw->createdAt) : null,
+            isset($raw->updatedAt) ? new \DateTimeImmutable($raw->updatedAt) : null,
         );
     }
 
@@ -46,9 +45,11 @@ final class InvoiceMapper implements
     {
         $company = CompanyMapper::fromEntityToDto($entity->getCompany());
 
-        $products = $entity->getProducts()->map(
-            static fn(Product $product): ProductDto => ProductMapper::fromEntityToDto($product)
-        );
+        $products = $entity->getProducts();
+
+        $products = $products->count() > 0
+            ? $products->map(static fn(Product $product): ProductDto => ProductMapper::fromEntityToDto($product))
+            : TypedCollectionImmutable::create(ProductDto::class);
 
         return new InvoiceDto(
             $entity->getId(),
@@ -77,9 +78,13 @@ final class InvoiceMapper implements
     ): array {
         $company = CompanyMapper::fromDtoToArray($dto->company, $format, $timestamps);
 
-        $products = $dto->products->map(
-            static fn(ProductDto $product): array => ProductMapper::fromDtoToArray($product, $format, $timestamps)
-        );
+        $products = $dto->products;
+
+        $products = 0 === $products->count()
+            ? TypedCollectionImmutable::create('array')
+            : $products->map(
+                static fn(ProductDto $product): array => ProductMapper::fromDtoToArray($product, $format, $timestamps)
+            );
 
         $total = $format ? $dto->totalFormatted : $dto->total;
 

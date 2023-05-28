@@ -12,9 +12,7 @@ use App\Modules\Invoices\Application\Mapper\InvoiceMapper;
 use App\Modules\Invoices\Application\Service\InvoiceService;
 use App\Modules\Invoices\Domain\Entity\Company;
 use App\Modules\Invoices\Domain\Entity\Invoice;
-use App\Modules\Invoices\Domain\Entity\Product;
 use App\Modules\Invoices\Domain\Repository\InvoiceRepositoryInterface;
-use EduardoMarques\TypedCollections\TypedCollectionImmutable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -75,8 +73,6 @@ final class InvoiceServiceTest extends TestCase
             $email,
         );
 
-        $products = TypedCollectionImmutable::create(Product::class);
-
         $number = Uuid::uuid1();
         $date = new \DateTimeImmutable();
         $dueDate = new \DateTimeImmutable();
@@ -87,10 +83,10 @@ final class InvoiceServiceTest extends TestCase
             $number,
             $date,
             $dueDate,
-            $company,
             $status,
-            $products,
         );
+
+        $invoice->setCompany($company);
 
         $this->invoiceRepository->expects($this->once())
             ->method('findById')
@@ -150,8 +146,6 @@ final class InvoiceServiceTest extends TestCase
             $email,
         );
 
-        $products = TypedCollectionImmutable::create(Product::class);
-
         $number = Uuid::uuid1();
         $date = new \DateTimeImmutable();
         $dueDate = new \DateTimeImmutable();
@@ -162,10 +156,10 @@ final class InvoiceServiceTest extends TestCase
             $number,
             $date,
             $dueDate,
-            $company,
             $status,
-            $products,
         );
+
+        $invoice->setCompany($company);
 
         $this->invoiceRepository->expects($this->once())
             ->method('findById')
@@ -235,8 +229,6 @@ final class InvoiceServiceTest extends TestCase
             $email,
         );
 
-        $products = TypedCollectionImmutable::create(Product::class);
-
         $number = Uuid::uuid1();
         $date = new \DateTimeImmutable();
         $dueDate = new \DateTimeImmutable();
@@ -247,10 +239,10 @@ final class InvoiceServiceTest extends TestCase
             $number,
             $date,
             $dueDate,
-            $company,
             $status,
-            $products,
         );
+
+        $invoice->setCompany($company);
 
         $this->invoiceRepository->expects($this->once())
             ->method('findById')

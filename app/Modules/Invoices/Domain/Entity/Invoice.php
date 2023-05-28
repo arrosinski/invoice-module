@@ -4,24 +4,29 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Domain\Entity;
 
+use App\Domain\Enums\CurrencyEnum;
 use App\Domain\Enums\StatusEnum;
+use EduardoMarques\TypedCollections\TypedCollectionImmutable;
 use EduardoMarques\TypedCollections\TypedCollectionInterface;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\UuidInterface;
 
 final class Invoice implements EntityInterface
 {
+    private Company $company;
+
+    private TypedCollectionInterface $products;
+
     public function __construct(
         private readonly UuidInterface $id,
         private UuidInterface $number,
         private \DateTimeInterface $date,
         private \DateTimeInterface $dueDate,
-        private Company $company,
         private StatusEnum $status,
-        private TypedCollectionInterface $products,
         private readonly ?\DateTimeInterface $createdAt = null,
         private readonly ?\DateTimeInterface $updatedAt = null,
     ) {
+        $this->products = TypedCollectionImmutable::create(Product::class);
     }
 
     public function getId(): UuidInterface
@@ -49,6 +54,13 @@ final class Invoice implements EntityInterface
         return $this->company;
     }
 
+    public function setCompany(Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
     public function getStatus(): StatusEnum
     {
         return $this->status;
@@ -57,6 +69,13 @@ final class Invoice implements EntityInterface
     public function getProducts(): TypedCollectionInterface
     {
         return $this->products;
+    }
+
+    public function addProduct(Product $product): self
+    {
+        $this->products = $this->products->add($product);
+
+        return $this;
     }
 
     public function getCreatedAt(): ?\DateTimeInterface
@@ -86,7 +105,7 @@ final class Invoice implements EntityInterface
 
         return sprintf(
             '%s %s',
-            $firstProduct?->getCurrency()->name,
+            $firstProduct?->getCurrency()->name ?? CurrencyEnum::USD->name,
             Str::currency($productsTotal)
         );
     }

@@ -73,7 +73,7 @@ final readonly class InvoiceService
     {
         $invoice = $this->invoiceRepository->findById($id);
 
-        if ($invoice === null) {
+        if (null === $invoice) {
             throw new InvoiceNotFoundException('Approval cannot be performed because the invoice could not be found');
         }
 

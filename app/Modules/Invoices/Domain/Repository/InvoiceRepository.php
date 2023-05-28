@@ -22,16 +22,39 @@ final readonly class InvoiceRepository implements InvoiceRepositoryInterface
      */
     public function findById(UuidInterface $id): ?Invoice
     {
-        $invoiceRaw = DB::table('invoices')->find($id->toString());
+        $invoiceRaw = DB::table('invoices')->find(
+            $id->toString(),
+            [
+                'id',
+                'number',
+                'date',
+                'status',
+                'due_date AS dueDate',
+                'company_id AS companyId',
+                'created_at AS createdAt',
+                'updated_at AS updatedAt',
+            ]
+        );
 
-        if ($invoiceRaw === null) {
+        if (null === $invoiceRaw) {
             return null;
         }
 
-        $invoiceRaw->company = $this->findCompanyById($id);
-        $invoiceRaw->products = $this->findProductsById($id);
+        $invoice = InvoiceMapper::fromRawToEntity($invoiceRaw);
 
-        return InvoiceMapper::fromRawToEntity($invoiceRaw);
+        $company = $this->findCompanyById($id);
+
+        if (null !== $company) {
+            $invoice->setCompany($company);
+        }
+
+        $products = $this->findProductsById($id);
+
+        foreach ($products->toArray() as $product) {
+            $invoice->addProduct($product);
+        }
+
+        return $invoice;
     }
 
     /**
