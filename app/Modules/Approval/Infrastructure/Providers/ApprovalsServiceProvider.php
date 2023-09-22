@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Approval\Infrastructure\Providers;
 
-use App\Modules\Approval\Api\ApprovalFacadeInterface;
-use App\Modules\Approval\Application\ApprovalFacade;
+use App\Modules\Approval\Api\ApprovalFacade;
+use App\Modules\Approval\Application\ApprovalFacadeInterface;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 

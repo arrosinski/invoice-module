@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Modules\Invoices\Api\InvoiceController;
+use App\Modules\Approval\Api\ApprovalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,18 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get(
+    '/invoices', [InvoiceController::class, 'index']
+);
+
+Route::get(
+    '/invoices/{id}', [InvoiceController::class, 'show']);
+
+Route::post(
+    '/invoices/{id}/approve', [ApprovalController::class, 'approve']
+);
+
+Route::post(
+    '/invoices/{id}/reject', [ApprovalController::class, 'reject']
+);
