@@ -4,18 +4,32 @@ namespace App\Modules\Invoices\Domain;
 
 class LineItem
 {
+    public string $id;
+    public string $name;
+    public int $quantity;
+    public float $price;
+    public float $total;
+    public string $currency;
+    public string $createdAt;
+    public string $updatedAt;
 
-    protected $table = 'invoice_product_lines';
-    protected $keyType = 'string';
-    private int $id;
-    private int $quantity;
-    private float $price;
-    private float $total;
-    private string $createdAt;
-    private string $updatedAt;
-
-    public function product(): Product
-    {
-        return $this->hasOne(Product::class, 'id', 'product_id');
+    public function __construct(
+        string $id,
+        string $name,
+        int $quantity,
+        float $price,
+        float $total,
+        string $currency,
+        string $createdAt,
+        string $updatedAt
+    ) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->quantity = $quantity;
+        $this->price = $price;
+        $this->total = $total;
+        $this->currency = $currency;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
     }
 }

@@ -3,32 +3,44 @@
 namespace App\Modules\Invoices\Domain;
 
 use App\Domain\Enums\StatusEnum;
-use Illuminate\Database\Eloquent\Model;
-use Ramsey\Uuid\Uuid;
 
-class Invoice extends Model
+class Invoice
 {
-    protected $table = 'invoices';
-    protected $keyType = 'string';
-
-    public Uuid $id;
+    public string $id;
     public string $number;
     public string $date;
     public string $dueDate;
+    public Company $company;
     public StatusEnum $status;
+
+    /**
+     * @var LineItem[]
+     */
+    public array $lineItems;
 
     public string $createdAt;
     public string $updatedAt;
 
-    public function company()
-    {
-        return $this->hasOne(Company::class, 'id', 'company_id');
+    public function __construct(
+        string $id,
+        string $number,
+        string $date,
+        string $dueDate,
+        StatusEnum $status,
+        Company $company,
+        array $lineItems,
+        string $createdAt,
+        string $updatedAt
+    ) {
+        $this->id = $id;
+        $this->number = $number;
+        $this->date = $date;
+        $this->dueDate = $dueDate;
+        $this->status = $status;
+        $this->company = $company;
+        $this->lineItems = $lineItems;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
     }
-
-    public function lineItems()
-    {
-        return $this->hasMany(LineItem::class, 'invoice_id', 'id');
-    }
-
 }
 
