@@ -3,6 +3,8 @@
 namespace App\Modules\Invoices\Api;
 
 use App\Infrastructure\Controller;
+use App\Infrastructure\HateoasResponse;
+use App\Modules\Invoices\Api\Dto\InvoicesLinks;
 use App\Modules\Invoices\Application\InvoicesFacadeInterface;
 
 class InvoiceController extends Controller
@@ -16,13 +18,20 @@ class InvoiceController extends Controller
 
     public function index()
     {
-        return response()->json($this->invoicesFacade->list());
+        // Can be extended to include pagination
+        return HateoasResponse::create(
+                InvoicesLinks::parse_list_links($this->invoicesFacade->list()),
+                InvoicesLinks::index_links())
+            ->toResponse();
     }
 
     public function show(string $id)
     {
-        return response()->json(
-            $this->invoicesFacade->get($id)
-        );
+        $invoice = $this->invoicesFacade->get($id);
+        return HateoasResponse::create(
+            $invoice,
+            InvoicesLinks::show_links($id, $invoice->can_approve())
+        )->toResponse();
     }
+
 }

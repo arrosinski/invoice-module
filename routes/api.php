@@ -22,15 +22,17 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get(
     '/invoices', [InvoiceController::class, 'index']
-);
+)->name('invoices.index');
 
 Route::get(
-    '/invoices/{id}', [InvoiceController::class, 'show']);
+    '/invoices/{id}', [InvoiceController::class, 'show']
+)->name('invoices.show');
 
+// Could be a PUT request, as it is considered idempotent
 Route::post(
     '/invoices/{id}/approve', [ApprovalController::class, 'approve']
-);
+)->name('invoices.approve');
 
 Route::post(
     '/invoices/{id}/reject', [ApprovalController::class, 'reject']
-);
+)->name('invoices.reject');

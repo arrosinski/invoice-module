@@ -12,6 +12,7 @@ class InvoiceMapper
     public static function map(\stdClass $invoice): Invoice
     {
         $lineItems = [];
+        $grandTotal = 0;
         foreach ($invoice->line_items as $lineItem) {
             $lineItems[] = new LineItem(
                 $lineItem->id,
@@ -23,6 +24,7 @@ class InvoiceMapper
                 $lineItem->created_at,
                 $lineItem->updated_at
             );
+            $grandTotal += $lineItem->price * $lineItem->quantity;
         }
 
         return new Invoice(
@@ -43,6 +45,7 @@ class InvoiceMapper
                 $invoice->company->updated_at
             ),
             $lineItems,
+            $grandTotal,
             $invoice->created_at,
             $invoice->updated_at
         );

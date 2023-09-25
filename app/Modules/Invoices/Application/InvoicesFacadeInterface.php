@@ -9,4 +9,6 @@ interface InvoicesFacadeInterface
     public function list(): array;
 
     public function get(string $id): Invoice;
+
+    public function can_approve(string $id);
 }

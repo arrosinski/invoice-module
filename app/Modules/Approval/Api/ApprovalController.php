@@ -11,7 +11,7 @@ use Ramsey\Uuid\Uuid;
 class ApprovalController extends Controller
 {
     public function __construct(
-        private ApprovalFacade $facade
+        private IdempotentApprovalFacade $facade
     ) {
     }
     public function approve(Uuid $id): int|bool

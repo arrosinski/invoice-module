@@ -24,4 +24,9 @@ class InvoicesFacade implements InvoicesFacadeInterface
     {
         return $this->invoicesRepository->get($id);
     }
+
+    public function can_approve(string $id): bool
+    {
+        return $this->get($id)->can_approve();
+    }
 }

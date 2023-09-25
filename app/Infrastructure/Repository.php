@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure;
 
-use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\DB;
 
 class Repository
 {
@@ -23,12 +23,12 @@ class Repository
         return DB::table($this->table)->get()->toArray();
     }
 
-    public function create(object $object): Uuid
+    public function create(object $object): int
     {
         return DB::table($this->table)->insertGetId($object);
     }
 
-    public function update(object $object): object
+    public function update(object $object): int
     {
         return DB::table($this->table)->where('id', $object->id)->update($object);
     }

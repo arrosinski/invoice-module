@@ -18,6 +18,8 @@ class Invoice
      */
     public array $lineItems;
 
+    public float $grandTotal;
+
     public string $createdAt;
     public string $updatedAt;
 
@@ -29,6 +31,7 @@ class Invoice
         StatusEnum $status,
         Company $company,
         array $lineItems,
+        float $grandTotal,
         string $createdAt,
         string $updatedAt
     ) {
@@ -39,8 +42,14 @@ class Invoice
         $this->status = $status;
         $this->company = $company;
         $this->lineItems = $lineItems;
+        $this->grandTotal = $grandTotal;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
+    }
+
+    public function can_approve(): bool
+    {
+        return $this->status->equals(StatusEnum::DRAFT);
     }
 }
 

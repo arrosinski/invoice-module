@@ -11,8 +11,7 @@ use App\Modules\Approval\Api\Events\EntityRejected;
 use App\Modules\Approval\Application\ApprovalFacadeInterface;
 use Illuminate\Contracts\Events\Dispatcher;
 use LogicException;
-
-final readonly class ApprovalFacade implements ApprovalFacadeInterface
+final readonly class IdempotentApprovalFacade implements ApprovalFacadeInterface
 {
     public function __construct(
         private Dispatcher $dispatcher
