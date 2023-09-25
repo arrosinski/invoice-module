@@ -4,7 +4,8 @@ namespace App\Modules\Invoices\Api;
 
 use App\Modules\Invoices\Application\InvoicesFacadeInterface;
 use App\Modules\Invoices\Application\InvoicesRepositoryInterface;
-use App\Modules\Invoices\Domain\Invoice;
+use App\Modules\Invoices\Domain\Entities\Invoice;
+use App\Modules\Invoices\Domain\Policies\CanChangeStatusPolicy;
 
 class InvoicesFacade implements InvoicesFacadeInterface
 {
@@ -25,8 +26,17 @@ class InvoicesFacade implements InvoicesFacadeInterface
         return $this->invoicesRepository->get($id);
     }
 
-    public function can_approve(string $id): bool
+    public function approve(string $id): void
     {
-        return $this->get($id)->can_approve();
+        $invoice = $this->invoicesRepository->get($id);
+        CanChangeStatusPolicy::except($invoice);
+        $this->invoicesRepository->approve($id);
+    }
+
+    public function reject(string $id): void
+    {
+        $invoice = $this->invoicesRepository->get($id);
+        CanChangeStatusPolicy::except($invoice);
+        $this->invoicesRepository->reject($id);
     }
 }

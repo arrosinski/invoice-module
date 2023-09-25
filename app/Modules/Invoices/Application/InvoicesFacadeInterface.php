@@ -2,7 +2,7 @@
 
 namespace App\Modules\Invoices\Application;
 
-use App\Modules\Invoices\Domain\Invoice;
+use App\Modules\Invoices\Domain\Entities\Invoice;
 
 interface InvoicesFacadeInterface
 {
@@ -10,5 +10,8 @@ interface InvoicesFacadeInterface
 
     public function get(string $id): Invoice;
 
-    public function can_approve(string $id);
+    public function approve(string $id);
+
+    public function reject(string $id);
+
 }

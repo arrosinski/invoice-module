@@ -3,6 +3,7 @@
 namespace App\Modules\Invoices\Api\Dto;
 
 use App\Infrastructure\HateoasLink;
+use App\Modules\Invoices\Domain\Policies\CanChangeStatusPolicy;
 
 class InvoicesLinks
 {
@@ -16,15 +17,17 @@ class InvoicesLinks
     public static function parse_list_links(array $invoices): array
     {
         return array_map(
-            fn($invoice) => tap($invoice, function ($invoice) {
-                $invoice->_links = self::show_links($invoice->id, $invoice->can_approve());
-                return $invoice;
-            }),
+            function ($invoice) {
+                return InvoiceListViewModel::fromArray(
+                    $invoice,
+                    self::details_links($invoice->id, CanChangeStatusPolicy::check($invoice))
+                );
+            },
             $invoices
         );
     }
 
-    public static function show_links(string $id, bool $canApprove): array
+    public static function details_links(string $id, bool $canApprove): array
     {
         $links = [
             HateoasLink::create('self', route('invoices.show', ['id' => $id]))->toArray(),
@@ -36,6 +39,16 @@ class InvoicesLinks
 
         return $links;
     }
+
+    public static function show_links(string $id, bool $canApprove): array
+    {
+        return array_merge(
+            self::details_links($id, $canApprove),
+            [HateoasLink::create('index', route('invoices.index'))->toArray()]
+        );
+    }
+
+
 
     public static function approval_links(string $id): array {
         return [

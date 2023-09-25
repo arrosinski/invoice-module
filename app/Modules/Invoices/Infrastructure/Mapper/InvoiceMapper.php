@@ -2,10 +2,10 @@
 
 namespace App\Modules\Invoices\Infrastructure\Mapper;
 
-use App\Domain\Enums\StatusEnum;
-use App\Modules\Invoices\Domain\Company;
-use App\Modules\Invoices\Domain\Invoice;
-use App\Modules\Invoices\Domain\LineItem;
+use App\Modules\Invoices\Domain\Entities\Company;
+use App\Modules\Invoices\Domain\Entities\Invoice;
+use App\Modules\Invoices\Domain\Entities\LineItem;
+use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
 
 class InvoiceMapper
 {
@@ -13,18 +13,21 @@ class InvoiceMapper
     {
         $lineItems = [];
         $grandTotal = 0;
-        foreach ($invoice->line_items as $lineItem) {
-            $lineItems[] = new LineItem(
-                $lineItem->id,
-                $lineItem->name,
-                $lineItem->quantity,
-                $lineItem->price,
-                $lineItem->price * $lineItem->quantity,
-                $lineItem->currency,
-                $lineItem->created_at,
-                $lineItem->updated_at
-            );
-            $grandTotal += $lineItem->price * $lineItem->quantity;
+
+        if (isset($invoice->line_items)) {
+            foreach ($invoice->line_items as $lineItem) {
+                $lineItems[] = new LineItem(
+                    $lineItem->id,
+                    $lineItem->name,
+                    $lineItem->quantity,
+                    $lineItem->price,
+                    $lineItem->price * $lineItem->quantity,
+                    $lineItem->currency,
+                    $lineItem->created_at,
+                    $lineItem->updated_at
+                );
+                $grandTotal += $lineItem->price * $lineItem->quantity;
+            }
         }
 
         return new Invoice(

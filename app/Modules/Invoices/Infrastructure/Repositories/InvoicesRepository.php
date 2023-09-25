@@ -3,7 +3,8 @@
 namespace App\Modules\Invoices\Infrastructure\Repositories;
 
 use App\Modules\Invoices\Application\InvoicesRepositoryInterface;
-use App\Modules\Invoices\Domain\Invoice;
+use App\Modules\Invoices\Domain\Entities\Invoice;
+use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
 use App\Modules\Invoices\Infrastructure\Mapper\InvoiceMapper;
 use Illuminate\Support\Facades\DB;
 
@@ -24,5 +25,28 @@ final class InvoicesRepository implements InvoicesRepositoryInterface
     public function getAll(): array
     {
         return DB::table('invoices')->get()->toArray();
+    }
+
+    public function getStatus(string $id): string
+    {
+        return DB::table('invoices')
+            ->select('invoices.status')
+            ->where('invoices.id', $id)->first()->status;
+    }
+
+    public function reject(string $id)
+    {
+        return DB::table('invoices')
+            ->where('invoices.id', $id)
+            ->where('invoices.status', StatusEnum::DRAFT->value)
+            ->update(['status' => StatusEnum::REJECTED->value]);
+    }
+
+    public function approve(string $id)
+    {
+        return DB::table('invoices')
+            ->where('invoices.id', $id)
+            ->where('invoices.status', StatusEnum::DRAFT->value)
+            ->update(['status' => StatusEnum::APPROVED->value]);
     }
 }

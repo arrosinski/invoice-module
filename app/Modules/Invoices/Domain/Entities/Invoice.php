@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Modules\Invoices\Domain;
+namespace App\Modules\Invoices\Domain\Entities;
 
-use App\Domain\Enums\StatusEnum;
+use App\Modules\Invoices\Domain\Policies\CanChangeStatusPolicy;
+use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
 
 class Invoice
 {
@@ -47,9 +48,16 @@ class Invoice
         $this->updatedAt = $updatedAt;
     }
 
-    public function can_approve(): bool
+    public function canApprove(): bool
     {
-        return $this->status->equals(StatusEnum::DRAFT);
+        return CanChangeStatusPolicy::check($this);
     }
+
+    public function canReject(): bool
+    {
+        return CanChangeStatusPolicy::check($this);
+    }
+
+
 }
 

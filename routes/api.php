@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Modules\Invoices\Api\InvoiceController;
-use App\Modules\Approval\Api\ApprovalController;
+use App\Modules\Approval\Api\InvoiceApprovalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,9 +30,9 @@ Route::get(
 
 // Could be a PUT request, as it is considered idempotent
 Route::post(
-    '/invoices/{id}/approve', [ApprovalController::class, 'approve']
+    '/invoices/{id}/approve', [InvoiceApprovalController::class, 'approve']
 )->name('invoices.approve');
 
 Route::post(
-    '/invoices/{id}/reject', [ApprovalController::class, 'reject']
+    '/invoices/{id}/reject', [InvoiceApprovalController::class, 'reject']
 )->name('invoices.reject');

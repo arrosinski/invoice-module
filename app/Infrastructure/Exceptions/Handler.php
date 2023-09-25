@@ -3,6 +3,8 @@
 namespace App\Infrastructure\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Psr\Log\LogLevel;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -14,6 +16,7 @@ class Handler extends ExceptionHandler
      */
     protected $levels = [
         //
+        \DomainException::class => LogLevel::WARNING
     ];
 
     /**
@@ -45,6 +48,16 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (\DomainException $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                    'status' => 'error',
+                    'type' => 'domain',
+                ], 400);
+            }
         });
     }
 }

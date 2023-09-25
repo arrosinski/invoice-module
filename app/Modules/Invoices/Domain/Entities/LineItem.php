@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Invoices\Domain;
+namespace App\Modules\Invoices\Domain\Entities;
 
 class LineItem
 {

@@ -30,7 +30,7 @@ class InvoiceController extends Controller
         $invoice = $this->invoicesFacade->get($id);
         return HateoasResponse::create(
             $invoice,
-            InvoicesLinks::show_links($id, $invoice->can_approve())
+            InvoicesLinks::show_links($id, $invoice->canApprove())
         )->toResponse();
     }
 
