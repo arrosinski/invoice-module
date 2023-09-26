@@ -1,0 +1,18 @@
+# CHANGELOG
+
+### commit #9d8ef594
+- add exception support to handle loose coupling 
+- reorganize entities to match architecture
+
+### commit #c7ea1d44
+- add hateoas implementation for convenience
+- considering multiple implementations for Facades and repositories (tight vs loose coupled, query builder vs orm)
+
+### commit #8607fe96
+- Add mapper and repository
+
+### commit #02bfba03
+- Reorganize project
+- setup correct structure
+- add controllers and routes
+- fix initial boot issues
