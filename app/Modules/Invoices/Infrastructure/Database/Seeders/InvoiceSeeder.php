@@ -23,25 +23,30 @@ class InvoiceSeeder extends Seeder
         $companies = $this->db->table('companies')->get();
         $products = $this->db->table('products')->get();
 
-        $faker = Factory::create();
-
         $invoices = [];
 
         for ($i = 0; $i < 10; $i++) {
-            $invoices[] = [
-                'id' => Uuid::uuid4()->toString(),
-                'number' => $faker->uuid(),
-                'date' => $faker->date(),
-                'due_date' => $faker->date(),
-                'company_id' => $companies->random()->id,
-                'status' => StatusEnum::cases()[array_rand(StatusEnum::cases())],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ];
+            $invoices[] = self::stubInvoice($companies->random()->id);
         }
 
         $this->db->table('invoices')->insert($invoices);
         $this->addInvoiceProductLines($products, $invoices);
+    }
+
+    public static function stubInvoice($company_id): array
+    {
+        $faker = Factory::create();
+
+        return [
+            'id' => Uuid::uuid4()->toString(),
+            'number' => $faker->uuid(),
+            'date' => $faker->date(),
+            'due_date' => $faker->date(),
+            'company_id' => $company_id,
+            'status' => StatusEnum::cases()[array_rand(StatusEnum::cases())],
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
     }
 
     private function addInvoiceProductLines(Collection $products, array $invoices): void

@@ -13,7 +13,7 @@ class EloquentInvoicesRepository implements InvoicesRepositoryInterface
 
     public function get(string $id): Invoice
     {
-        $invoice = InvoiceDao::with(['company', 'lineItems'])->where('id', $id)->first();
+        $invoice = InvoiceDao::with(['company', 'lineItems'])->findOrFail($id);
 
         return InvoiceMapper::map($invoice);
     }

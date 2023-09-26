@@ -33,7 +33,7 @@ class InvoiceMapper
 
         return Invoice::builder()
             ->withId($invoice->id)
-            ->withStatus($invoice->status)
+            ->withStatus(is_string($invoice->status) ? $invoice->status : $invoice->status->value)
             ->withCompany(
                 Company::builder()
                     ->fromArray($invoice->company->toArray())

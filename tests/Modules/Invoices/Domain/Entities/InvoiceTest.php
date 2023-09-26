@@ -21,7 +21,7 @@ class InvoiceTest extends TestCase
             'id' => '123',
             'number' => '123',
             'date' => '2021-01-01',
-            'status' => StatusEnum::APPROVED,
+            'status' => StatusEnum::APPROVED->value,
             ])
             ->build();
 
@@ -30,4 +30,49 @@ class InvoiceTest extends TestCase
         $this->assertEquals('2021-01-01', $this->invoice->date);
         $this->assertEquals(StatusEnum::APPROVED, $this->invoice->status);
     }
+
+    public function testStatusNotApprovable()
+    {
+        $this->invoice = Invoice::builder()->fromArray([
+            'id' => '123',
+            'number' => '123',
+            'date' => '2021-01-01',
+            'status' => StatusEnum::APPROVED->value,
+            ])
+            ->build();
+
+        $this->assertEquals(false, $this->invoice->canApprove());
+        $this->assertEquals(false, $this->invoice->canReject());
+    }
+
+
+    public function testStatusNotApprovable2()
+    {
+        $this->invoice = Invoice::builder()->fromArray([
+            'id' => '123',
+            'number' => '123',
+            'date' => '2021-01-01',
+            'status' => StatusEnum::REJECTED->value,
+            ])
+            ->build();
+
+        $this->assertEquals(false, $this->invoice->canApprove());
+        $this->assertEquals(false, $this->invoice->canReject());
+    }
+
+    public function testStatusApprovable()
+    {
+        $this->invoice = Invoice::builder()->fromArray([
+            'id' => '123',
+            'number' => '123',
+            'date' => '2021-01-01',
+            'status' => StatusEnum::DRAFT->value,
+            ])
+            ->build();
+
+        $this->assertEquals(true, $this->invoice->canApprove());
+        $this->assertEquals(true, $this->invoice->canReject());
+    }
+
+
 }

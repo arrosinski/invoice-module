@@ -3,7 +3,6 @@
 namespace App\Modules\Invoices\Domain\Entities;
 
 use App\Infrastructure\Traits\Builder;
-use App\Infrastructure\Traits\EnumTrait;
 use App\Modules\Invoices\Domain\Policies\CanChangeStatusPolicy;
 use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
 

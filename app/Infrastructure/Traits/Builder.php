@@ -2,6 +2,8 @@
 
 namespace App\Infrastructure\Traits;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use ReflectionClass;
 
 /**
@@ -59,16 +61,21 @@ trait Builder
                     $r = new ReflectionClass($this->instance);
                     foreach ($r->getProperties() as $prop) {
                         if ($prop->getName() === $property) {
-                            $prop->setAccessible(true);
-                            if ($this->isEnum($prop)) {
-                                $prop->setValue($this->instance, $prop->getType()->getName()::tryFrom($value));
-                            } else {
-                                $prop->setValue($this->instance, $value);
-                            }
+                            $this->setPropValue($prop, $value);
                         }
                     }
                 }
                 return $this;
+            }
+
+            private function setPropValue(\ReflectionProperty $prop, $value): void
+            {
+                $prop->setAccessible(true);
+                if ($this->isEnum($prop) && (is_string($value) || is_int($value))) {
+                    $prop->setValue($this->instance, $prop->getType()->getName()::tryFrom($value));
+                } else {
+                    $prop->setValue($this->instance, $value);
+                }
             }
 
             private function isEnum(\ReflectionProperty $prop):bool
@@ -107,13 +114,9 @@ trait Builder
                 $property = lcfirst(str_replace('with', '', $name));
                 $r = new ReflectionClass($this->instance);
                 foreach ($r->getProperties() as $prop) {
+                    if (empty($arguments[0])) return $this;
                     if ($prop->getName() === $property) {
-                        $prop->setAccessible(true);
-                        if ($this->isEnum($prop)) {
-                                $prop->setValue($this->instance, $prop->getType()->getName()::tryFrom($arguments[0]));
-                            } else {
-                                $prop->setValue($this->instance, $arguments[0]);
-                            }
+                        $this->setPropValue($prop, $arguments[0]);
                         return $this;
                     }
                 }
