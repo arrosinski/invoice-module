@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Invoices\Infrastructure\Repositories;
+namespace App\Modules\Invoices\Infrastructure\Database\Repositories;
 
 use App\Modules\Invoices\Application\InvoicesRepositoryInterface;
 use App\Modules\Invoices\Domain\Entities\Invoice;

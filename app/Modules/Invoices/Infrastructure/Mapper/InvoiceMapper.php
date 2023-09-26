@@ -6,10 +6,11 @@ use App\Modules\Invoices\Domain\Entities\Company;
 use App\Modules\Invoices\Domain\Entities\Invoice;
 use App\Modules\Invoices\Domain\Entities\LineItem;
 use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
+use stdClass;
 
 class InvoiceMapper
 {
-    public static function map(\stdClass $invoice): Invoice
+    public static function map(stdClass $invoice): Invoice
     {
         $lineItems = [];
         $grandTotal = 0;

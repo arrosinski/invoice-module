@@ -1,7 +1,11 @@
 # CHANGELOG
 
+### commit #b1b0b5f0
+- added Eloquent ORM Model as DAO implementation
+- modified Line Item definition to be a snapshot of product instead of a reference
+
 ### commit #9d8ef594
-- add exception support to handle loose coupling 
+- add exception support to handle loose coupling
 - reorganize entities to match architecture
 
 ### commit #c7ea1d44

@@ -54,10 +54,14 @@ class InvoiceSeeder extends Seeder
             $freshProducts = clone $products;
 
             for ($i = 0; $i < $randomNumberOfProducts; $i++) {
+                $product = $freshProducts->pop();
                 $lines[] = [
                     'id' => Uuid::uuid4()->toString(),
                     'invoice_id' => $invoice['id'],
-                    'product_id' => $freshProducts->pop()->id,
+                    'product_id' => $product->id,
+                    'price' => $product->price,
+                    'name' => $product->name,
+                    'currency' => 'usd',
                     'quantity' => rand(1, 100),
                     'created_at' => now(),
                     'updated_at' => now(),

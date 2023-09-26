@@ -4,6 +4,7 @@ namespace App\Modules\Invoices\Domain\Policies;
 
 use App\Infrastructure\PolicyInterface;
 use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
+use DomainException;
 use Illuminate\Support\Facades\Log;
 
 class CanChangeStatusPolicy implements PolicyInterface
@@ -21,7 +22,7 @@ class CanChangeStatusPolicy implements PolicyInterface
     {
         Log::debug('CanChangeStatusPolicy');
         if(!self::check($entity, $user)) {
-            throw new \DomainException('Invoice status cannot be changed');
+            throw new DomainException('Invoice status cannot be changed');
         }
     }
 }
