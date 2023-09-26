@@ -70,3 +70,11 @@ Unit tests in plus.
   ```
   docker compose exec workspace bash
   ``` 
+
+
+## Implementation notes
+
+- Loose coupling between modules can be achieved, assuming we require proper response, only if we implement custom exception handler
+- Approval module does not have to be seperated, unless, as DTO suggests it handles multiple modules that share similar logic
+- Product SHOULD NOT be used as reference in Line Item. If anything, only as link to original product. Line Item is a snapshot of a product at the time of purchase. Product can change in time - line item should not. 
+- My initial instict was to use QueryBuilder, as you use Memcached in your stack, and ORM has it's own caching mechanism. There are benefits to each of the solutions, and I didn't want to tie domain entity to ORM. Definitely ORM Model should be seperated as DAO.
