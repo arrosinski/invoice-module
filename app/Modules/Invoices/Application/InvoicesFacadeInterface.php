@@ -6,6 +6,9 @@ use App\Modules\Invoices\Domain\Entities\Invoice;
 
 interface InvoicesFacadeInterface
 {
+    /**
+     * @return Invoice[]
+     */
     public function list(): array;
 
     public function get(string $id): Invoice;

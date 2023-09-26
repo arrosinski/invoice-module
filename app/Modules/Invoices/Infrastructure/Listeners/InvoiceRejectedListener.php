@@ -27,7 +27,7 @@ readonly class InvoiceRejectedListener
         if (!class_exists($event->approvalDto->entity)) {
             throw new InvalidArgumentException('Invalid entity class');
         }
-        if (!is_subclass_of($event->approvalDto->entity, Invoice::class)) {
+        if ($event->approvalDto->entity !== Invoice::class) {
             return false;
         }
         return true;

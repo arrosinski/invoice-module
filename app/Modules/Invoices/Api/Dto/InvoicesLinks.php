@@ -18,7 +18,7 @@ class InvoicesLinks
     {
         return array_map(
             function ($invoice) {
-                return InvoiceListViewModel::fromArray(
+                return InvoiceListViewModel::fromInvoice(
                     $invoice,
                     self::details_links($invoice->id, CanChangeStatusPolicy::check($invoice))
                 );

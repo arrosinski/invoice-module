@@ -5,18 +5,18 @@ namespace App\Modules\Invoices\Infrastructure\Mapper;
 use App\Modules\Invoices\Domain\Entities\Company;
 use App\Modules\Invoices\Domain\Entities\Invoice;
 use App\Modules\Invoices\Domain\Entities\LineItem;
-use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
+use App\Modules\Invoices\Infrastructure\Database\Dao\InvoiceDao;
 use stdClass;
 
 class InvoiceMapper
 {
-    public static function map(stdClass $invoice): Invoice
+    public static function map(stdClass|InvoiceDao $invoice): Invoice
     {
         $lineItems = [];
         $grandTotal = 0;
 
-        if (isset($invoice->line_items)) {
-            foreach ($invoice->line_items as $lineItem) {
+        if (isset($invoice->lineItems)) {
+            foreach ($invoice->lineItems as $lineItem) {
                 $lineItems[] = new LineItem(
                     $lineItem->id,
                     $lineItem->name,
@@ -31,27 +31,22 @@ class InvoiceMapper
             }
         }
 
-        return new Invoice(
-            $invoice->id,
-            $invoice->number,
-            $invoice->date,
-            $invoice->due_date,
-            StatusEnum::from($invoice->status),
-            new Company(
-                $invoice->company->id,
-                $invoice->company->name,
-                $invoice->company->street,
-                $invoice->company->city,
-                $invoice->company->zip,
-                $invoice->company->phone,
-                $invoice->company->email,
-                $invoice->company->created_at,
-                $invoice->company->updated_at
-            ),
-            $lineItems,
-            $grandTotal,
-            $invoice->created_at,
-            $invoice->updated_at
-        );
+        return Invoice::builder()
+            ->withId($invoice->id)
+            ->withStatus($invoice->status)
+            ->withCompany(
+                Company::builder()
+                    ->fromArray($invoice->company->toArray())
+                    ->withCreatedAt($invoice->company->created_at)
+                    ->withUpdatedAt($invoice->company->updated_at)
+                    ->build()
+            )
+            ->withDueDate($invoice->due_date)
+            ->withCreatedAt($invoice->created_at)
+            ->withUpdatedAt($invoice->updated_at)
+            ->withLineItems($lineItems)
+            ->withGrandTotal($grandTotal)
+            ->build();
+
     }
 }

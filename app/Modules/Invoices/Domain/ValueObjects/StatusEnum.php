@@ -10,6 +10,8 @@ enum StatusEnum: string
     case APPROVED = 'approved';
     case REJECTED = 'rejected';
 
+    const UNDEFINED = 'undefined';
+
     public function equals(StatusEnum $DRAFT): bool
     {
         return $this->value === $DRAFT->value;

@@ -4,7 +4,6 @@ namespace Tests\Modules\Invoices\Api;
 
 use App\Modules\Invoices\Api\InvoicesFacade;
 use App\Modules\Invoices\Application\InvoicesRepositoryInterface;
-use App\Modules\Invoices\Domain\Entities\Invoice;
 use PHPUnit\Framework\TestCase;
 
 class InvoicesFacadeTest extends TestCase

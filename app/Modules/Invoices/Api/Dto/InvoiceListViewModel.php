@@ -3,54 +3,48 @@
 namespace App\Modules\Invoices\Api\Dto;
 
 use App\Infrastructure\Traits\ToArray;
-use App\Infrastructure\Traits\ToArrayTrait;
+use App\Modules\Invoices\Domain\Entities\Invoice;
 
-#[ToArray]
 class InvoiceListViewModel
 {
-    use ToArrayTrait;
-    public string $id;
-    public string $number;
-    public string $date;
-    public string $dueDate;
-    public string $status;
-    public string $createdAt;
-    public string $updatedAt;
-    public array $_links;
+    use ToArray;
 
-    /**
-     * @param string $id
-     * @param string $number
-     * @param string $date
-     * @param string $dueDate
-     * @param string $status
-     * @param string $createdAt
-     * @param string $updatedAt
-     * @param array $_links
-     */
-    public function __construct(string $id, string $number, string $date, string $dueDate, string $status, string $createdAt, string $updatedAt, array $_links = [])
+    public function __construct(
+        public string $id,
+        public string $number,
+        public string $date,
+        public string $dueDate,
+        public string $status,
+        public string $createdAt,
+        public string $updatedAt,
+        public array $_links = [])
     {
-        $this->id = $id;
-        $this->number = $number;
-        $this->date = $date;
-        $this->dueDate = $dueDate;
-        $this->status = $status;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
-        $this->_links = $_links;
     }
 
-    public static function fromArray(array|object $data, array $links): InvoiceListViewModel
+    public static function fromArray(array $data, array $links): InvoiceListViewModel
     {
-        $array = (array) $data;
         return new self(
-            $array['id'],
-            $array['number'],
-            $array['date'],
-            $array['due_date'],
-            $array['status'],
-            $array['created_at'],
-            $array['updated_at'],
+            $data['id'],
+            $data['number'],
+            $data['date'],
+            $data['due_date'],
+            $data['status'],
+            $data['created_at'],
+            $data['updated_at'],
+            $links,
+        );
+    }
+
+    public static function fromInvoice(Invoice $invoice, array $links): InvoiceListViewModel
+    {
+        return new self(
+            $invoice->id,
+            $invoice->number,
+            $invoice->date,
+            $invoice->dueDate,
+            $invoice->status->value,
+            $invoice->createdAt,
+            $invoice->updatedAt,
             $links,
         );
     }

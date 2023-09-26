@@ -8,7 +8,7 @@ use App\Modules\Invoices\Domain\ValueObjects\StatusEnum;
 use App\Modules\Invoices\Infrastructure\Mapper\InvoiceMapper;
 use Illuminate\Support\Facades\DB;
 
-final class InvoicesRepository implements InvoicesRepositoryInterface
+final class QueryBuilderInvoicesRepository implements InvoicesRepositoryInterface
 {
     public function get(string $id): Invoice
     {

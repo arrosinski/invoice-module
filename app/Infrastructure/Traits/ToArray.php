@@ -3,11 +3,8 @@
 namespace App\Infrastructure\Traits;
 
 use ReflectionClass;
-use Attribute;
-#[Attribute(Attribute::TARGET_CLASS)]
-class ToArray {}
 
-trait ToArrayTrait
+trait ToArray
 {
     public function toArray(): array
     {
