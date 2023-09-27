@@ -1325,6 +1325,9 @@ ENV LC_ALL ${LOCALE}
 
 WORKDIR /var/www
 
+RUN chown -R www-data:www-data /var/www/storage && \
+    chmod -R 775 /var/www/storage
+
 CMD ["php-fpm"]
 
 EXPOSE 9000

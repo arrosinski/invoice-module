@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Modules\Invoices\Api\InvoiceController;
+use App\Modules\Approval\Api\InvoiceApprovalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +19,20 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get(
+    '/invoices', [InvoiceController::class, 'index']
+)->name('invoices.index');
+
+Route::get(
+    '/invoices/{id}', [InvoiceController::class, 'show']
+)->name('invoices.show');
+
+// Could be a PUT request, as it is considered idempotent
+Route::post(
+    '/invoices/{id}/approve', [InvoiceApprovalController::class, 'approve']
+)->name('invoices.approve');
+
+Route::post(
+    '/invoices/{id}/reject', [InvoiceApprovalController::class, 'reject']
+)->name('invoices.reject');
