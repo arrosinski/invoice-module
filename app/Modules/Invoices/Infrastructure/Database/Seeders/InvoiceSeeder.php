@@ -22,6 +22,7 @@ class InvoiceSeeder extends Seeder
     {
         $companies = $this->db->table('companies')->get();
         $products = $this->db->table('products')->get();
+        $statuses = StatusEnum::cases();
 
         $faker = Factory::create();
 
@@ -34,7 +35,7 @@ class InvoiceSeeder extends Seeder
                 'date' => $faker->date(),
                 'due_date' => $faker->date(),
                 'company_id' => $companies->random()->id,
-                'status' => StatusEnum::cases()[array_rand(StatusEnum::cases())],
+                'status' => $statuses[$i % count($statuses)],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];

@@ -3,6 +3,8 @@
 namespace App\Infrastructure\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Ramsey\Uuid\UuidFactory;
+use Ramsey\Uuid\UuidFactoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(UuidFactoryInterface::class, UuidFactory::class);
     }
 
     /**
