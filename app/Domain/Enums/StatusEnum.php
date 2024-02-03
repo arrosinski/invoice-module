@@ -9,4 +9,9 @@ enum StatusEnum: string
     case DRAFT = 'draft';
     case APPROVED = 'approved';
     case REJECTED = 'rejected';
+
+    public function equalsTo(StatusEnum $other): bool
+    {
+        return $this->value === $other->value;
+    }
 }
