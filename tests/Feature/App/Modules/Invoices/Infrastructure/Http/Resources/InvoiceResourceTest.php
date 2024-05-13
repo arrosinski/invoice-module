@@ -18,7 +18,7 @@ class InvoiceResourceTest extends TestCase
         $this->seed(DatabaseSeeder::class);
         $invoice = Invoice::first();
 
-        $response = $this->get('api/invoices/' . $invoice->id);
+        $response = $this->getJson('api/invoices/' . $invoice->id);
 
         $response->assertStatus(200);
         $response->assertJsonFragment(['invoice_number' => $invoice->number]);

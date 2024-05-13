@@ -3,6 +3,8 @@
 namespace App\Infrastructure\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -43,6 +45,14 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        $this->renderable(function (\LogicException $exception, $request) {
+            if ($request->acceptsJson()) {
+                return response()->json(['error' => $exception->getMessage()], Response::HTTP_CONFLICT);
+            }
+
+            return parent::render($request, $exception);
+        });
+
         $this->reportable(function (Throwable $e) {
             //
         });
