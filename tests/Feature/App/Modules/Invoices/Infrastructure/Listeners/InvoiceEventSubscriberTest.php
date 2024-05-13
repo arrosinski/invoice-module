@@ -9,7 +9,6 @@ use App\Modules\Approval\Api\ApprovalFacadeInterface;
 use App\Modules\Approval\Api\Dto\ApprovalDto;
 use App\Modules\Invoices\Infrastructure\Model\Invoice;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Ramsey\Uuid\Uuid;
 use Tests\TestCase;
 
 class InvoiceEventSubscriberTest extends TestCase
@@ -23,7 +22,7 @@ class InvoiceEventSubscriberTest extends TestCase
         /** @var ApprovalFacadeInterface $testObj */
         $testObj = app(ApprovalFacadeInterface::class);
         $testObj->approve(new ApprovalDto(
-            Uuid::fromString($invoice->id),
+            $invoice->id,
             $invoice->status,
             \App\Modules\Invoices\Domain\Invoice::class
         ));
@@ -41,7 +40,7 @@ class InvoiceEventSubscriberTest extends TestCase
         /** @var ApprovalFacadeInterface $testObj */
         $testObj = app(ApprovalFacadeInterface::class);
         $testObj->reject(new ApprovalDto(
-            Uuid::fromString($invoice->id),
+            $invoice->id,
             $invoice->status,
             \App\Modules\Invoices\Domain\Invoice::class
         ));
@@ -63,7 +62,7 @@ class InvoiceEventSubscriberTest extends TestCase
         /** @var ApprovalFacadeInterface $testObj */
         $testObj = app(ApprovalFacadeInterface::class);
         $testObj->approve(new ApprovalDto(
-            Uuid::fromString($invoice->id),
+            $invoice->id,
             StatusEnum::DRAFT,
             \App\Modules\Invoices\Domain\Invoice::class
         ));

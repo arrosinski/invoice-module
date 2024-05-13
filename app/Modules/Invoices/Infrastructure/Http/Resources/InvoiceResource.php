@@ -17,7 +17,7 @@ final class InvoiceResource extends JsonResource
             'company' => new CompanyResource($this->company),
             'billed_company' => new BilledCompanyResource($this->company),
             'products' => (new ProductCollection($this->products)),
-            'total_price' => $this->totalPrice(),
+            'total_price' => (string) $this->totalPrice(),
         ];
     }
 }

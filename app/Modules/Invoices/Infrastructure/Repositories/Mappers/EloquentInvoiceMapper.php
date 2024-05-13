@@ -7,15 +7,14 @@ namespace App\Modules\Invoices\Infrastructure\Repositories\Mappers;
 use App\Domain\Enums\StatusEnum;
 use App\Modules\Invoices\Domain\Invoice as DomainInvoice;
 use App\Modules\Invoices\Infrastructure\Model\Invoice as EloquentInvoice;
-use Ramsey\Uuid\Uuid;
 
 final class EloquentInvoiceMapper
 {
     public function toDomain(EloquentInvoice $model): DomainInvoice
     {
-        $invoice = new DomainInvoice(Uuid::fromString($model->id));
+        $invoice = new DomainInvoice($model->id);
 
-        switch (StatusEnum::tryFrom($model->status)) {
+        switch ($model->status) {
             case StatusEnum::APPROVED:
                 $invoice->approve();
                 break;

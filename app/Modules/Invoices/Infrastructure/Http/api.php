@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('api')
     ->prefix('api/invoices')
     ->group(function (): void {
-        Route::get('{id}', function (string $id) {
-            return new InvoiceResource(Invoice::findOrFail($id));
+        Route::get('{invoice}', function (Invoice $invoice) {
+            return new InvoiceResource($invoice);
         });
 
-        Route::patch('{id}/approval', InvoiceApprovalController::class)->whereUuid('id');
+        Route::patch('{invoice}/approval', InvoiceApprovalController::class);
     });

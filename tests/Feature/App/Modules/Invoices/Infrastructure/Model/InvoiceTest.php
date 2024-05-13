@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature\App\Modules\Invoices\Infrastructure\Model;
 
+use App\Domain\ValueObjects\Money;
 use App\Modules\Invoices\Infrastructure\Model\Invoice;
 use App\Modules\Invoices\Infrastructure\Model\Product;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -22,15 +23,15 @@ class InvoiceTest extends TestCase
                 Product::factory()
                     ->count(3)
                     ->state(new Sequence(
-                        ['price' => 1],
-                        ['price' => 10],
-                        ['price' => 100],
+                        ['price' => new Money(1)],
+                        ['price' => new Money(10)],
+                        ['price' => new Money(100)],
                     )),
                 //HACK: id should be generated automatically (in model or factory)
                 fn ($sequence) => ['quantity' => 2, 'id' => Uuid::uuid4()]
             )
             ->create();
 
-        $this->assertEquals(222, $invoice->totalPrice());
+        $this->assertEquals(222, $invoice->totalPrice()->amount);
     }
 }

@@ -9,7 +9,7 @@ use App\Infrastructure\Controller;
 use App\Modules\Approval\Api\ApprovalFacadeInterface;
 use App\Modules\Approval\Api\Dto\ApprovalDto;
 use App\Modules\Invoices\Domain\Invoice;
-use Ramsey\Uuid\Uuid;
+use App\Modules\Invoices\Infrastructure\Model\Invoice as InvoiceModel;
 
 final class InvoiceApprovalController extends Controller
 {
@@ -18,10 +18,10 @@ final class InvoiceApprovalController extends Controller
     ) {
     }
 
-    public function __invoke(string $id, InvoiceApprovalRequest $request): void
+    public function __invoke(InvoiceModel $invoice, InvoiceApprovalRequest $request): void
     {
         $dto = new ApprovalDto(
-            Uuid::fromString($id),
+            $invoice->id,
             StatusEnum::DRAFT,
             Invoice::class
         );

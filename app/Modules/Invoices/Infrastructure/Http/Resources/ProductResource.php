@@ -13,8 +13,8 @@ final class ProductResource extends JsonResource
         return [
             'name' => $this->name,
             'quantity' => $this->pivot->quantity,
-            'unit_price' => $this->price,
-            'total' => $this->price * $this->pivot->quantity,
+            'unit_price' => (string) $this->price,
+            'total' => (string)$this->price->multiply($this->pivot->quantity),
         ];
     }
 }
