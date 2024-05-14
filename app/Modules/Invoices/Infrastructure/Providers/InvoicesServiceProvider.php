@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Infrastructure\Providers;
 
+use App\Modules\Approval\Api\Events\EntityApproved;
+use App\Modules\Approval\Api\Events\EntityRejected;
 use App\Modules\Invoices\Application\InvoiceRepositoryInterface;
-use App\Modules\Invoices\Infrastructure\Listeners\InvoiceEventSubscriber;
+use App\Modules\Invoices\Application\Listeners\ApproveInvoice;
+use App\Modules\Invoices\Application\Listeners\RejectInvoice;
 use App\Modules\Invoices\Infrastructure\Repositories\EloquentInvoiceRepository;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
@@ -17,7 +20,8 @@ class InvoicesServiceProvider extends ServiceProvider implements DeferrableProvi
     {
         $this->loadRoutesFrom(__DIR__ . '/../Http/api.php');
 
-        Event::subscribe(InvoiceEventSubscriber::class);
+        Event::listen(EntityApproved::class, ApproveInvoice::class);
+        Event::listen(EntityRejected::class, RejectInvoice::class);
     }
 
     public function register(): void

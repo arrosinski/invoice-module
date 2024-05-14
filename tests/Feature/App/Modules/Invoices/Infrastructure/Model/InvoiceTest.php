@@ -28,7 +28,7 @@ class InvoiceTest extends TestCase
                         ['price' => new Money(100)],
                     )),
                 //HACK: id should be generated automatically (in model or factory)
-                fn ($sequence) => ['quantity' => 2, 'id' => Uuid::uuid4()]
+                fn () => ['quantity' => 2, 'id' => Uuid::uuid4()]
             )
             ->create();
 
