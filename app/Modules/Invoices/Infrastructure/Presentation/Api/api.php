@@ -19,6 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/invoices/{uuid}', [InvoiceController::class, 'show'])->name('invoices.show');
-Route::post('/invoices/{uuid}/approve', [InvoiceController::class, 'approve'])->name('invoices.approve');
-Route::post('/invoices/{uuid}/reject', [InvoiceController::class, 'reject'])->name('invoices.reject');
+Route::get('/invoices/{id}', InvoiceController::class, 'show')->name('invoices.show')->middleware('auth:api');
