@@ -19,5 +19,8 @@ class Invoice extends Model
         'status',
     ];
 
-    protected $keyType = 'string';
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }
