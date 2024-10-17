@@ -10,37 +10,20 @@ class Invoice implements \JsonSerializable
     private \DateTime $date;
     private \DateTime $due_date;
     private Company $company;
+    private BilledCompany $billedCompany;
 
     public function __construct(
         string $number,
         \DateTime $date,
         \DateTime $due_date,
-        Company $company
+        Company $company,
+        BilledCompany $billedCompany
     ) {
         $this->number = $number;
         $this->date = $date;
         $this->due_date = $due_date;
         $this->company = $company;
-    }
-
-    public function getNumber(): string
-    {
-        return $this->number;
-    }
-
-    public function getDate(): \DateTime
-    {
-        return $this->date;
-    }
-
-    public function getDueDate(): \DateTime
-    {
-        return $this->due_date;
-    }
-
-    public function getCompany(): Company
-    {
-        return $this->company;
+        $this->billedCompany = $billedCompany;
     }
 
     public function jsonSerialize(): array
@@ -50,6 +33,7 @@ class Invoice implements \JsonSerializable
             'date' => $this->date->format('Y-m-d'),
             'due_date' => $this->due_date->format('Y-m-d'),
             'company' => $this->company,
+            'billed_company' => $this->billedCompany,
         ];
     }
 }

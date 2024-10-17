@@ -8,19 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    public $incrementing = false;
-
     protected $fillable = [
-        'id',
         'number',
         'date',
         'due_date',
         'company_id',
-        'status',
+        'billed_company_id',
     ];
 
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function billedCompany()
+    {
+        return $this->belongsTo(Company::class, 'billed_company_id');
     }
 }

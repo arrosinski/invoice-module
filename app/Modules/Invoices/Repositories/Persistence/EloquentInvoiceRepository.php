@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Repositories\Persistence;
 
-use App\Invoice as InvoiceModel;
 use App\Company as CompanyModel;
-use App\Modules\Invoices\Entities\Invoice as InvoiceEntity;
+use App\Invoice as InvoiceModel;
+use App\Modules\Invoices\Entities\BilledCompany as BilledCompanyEntity;
 use App\Modules\Invoices\Entities\Company as CompanyEntity;
+use App\Modules\Invoices\Entities\Invoice as InvoiceEntity;
 use App\Modules\Invoices\Repositories\InvoiceRepository;
 
 class EloquentInvoiceRepository implements InvoiceRepository
 {
     public function findAll(): array
     {
-        $invoices = InvoiceModel::with('company')->get(['number', 'date', 'due_date', 'company_id']);
+        $invoices = InvoiceModel::with(['company', 'billedCompany'])->get(['number', 'date', 'due_date', 'company_id', 'billed_company_id']);
 
         return $invoices->map(function ($invoice) {
             $company = CompanyModel::find($invoice->company_id, ['name', 'street', 'city', 'zip', 'phone']);
@@ -26,11 +27,22 @@ class EloquentInvoiceRepository implements InvoiceRepository
                 $company->phone
             );
 
+            $billedCompany = CompanyModel::find($invoice->billed_company_id, ['name', 'street', 'city', 'zip', 'phone', 'email']);
+            $billedCompanyEntity = new BilledCompanyEntity(
+                $billedCompany->name,
+                $billedCompany->street,
+                $billedCompany->city,
+                $billedCompany->zip,
+                $billedCompany->phone,
+                $billedCompany->email
+            );
+
             return new InvoiceEntity(
                 $invoice->number,
                 new \DateTime($invoice->date),
                 new \DateTime($invoice->due_date),
-                $companyEntity
+                $companyEntity,
+                $billedCompanyEntity
             );
         })->toArray();
     }
