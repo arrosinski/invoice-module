@@ -10,7 +10,6 @@ use App\Modules\Invoices\Repositories\InvoiceRepository;
 
 class EloquentInvoiceRepository implements InvoiceRepository
 {
-    /** @return array<InvoiceEntity> */
     public function findAll(): array
     {
         $invoices = InvoiceModel::all(['number', 'date', 'due_date']);

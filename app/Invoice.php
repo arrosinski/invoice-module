@@ -1,5 +1,6 @@
-// app/Invoice.php
 <?php
+
+declare(strict_types=1);
 
 namespace App;
 
@@ -7,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+    public $incrementing = false;
 
     protected $fillable = [
         'id',
@@ -17,6 +19,5 @@ class Invoice extends Model
         'status',
     ];
 
-    public $incrementing = false;
     protected $keyType = 'string';
 }

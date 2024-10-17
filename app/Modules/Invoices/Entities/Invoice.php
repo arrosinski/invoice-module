@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Entities;
 
-class Invoice
+class Invoice implements \JsonSerializable
 {
     private string $number;
     private \DateTime $date;
@@ -20,7 +20,6 @@ class Invoice
         $this->due_date = $due_date;
     }
 
-    // Getters for each property
     public function getNumber(): string
     {
         return $this->number;
@@ -34,5 +33,16 @@ class Invoice
     public function getDueDate(): \DateTime
     {
         return $this->due_date;
+    }
+    /**
+     * @return array<string, string>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'Invoice_number' => $this->number,
+            'Invoice_date' => $this->date->format('Y-m-d'),
+            'due_date' => $this->due_date->format('Y-m-d'),
+        ];
     }
 }

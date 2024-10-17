@@ -1,61 +1,24 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
 use App\Infrastructure\Controller;
-use Illuminate\Http\Request;
+use App\Modules\Invoices\Services\InvoiceService;
+use Illuminate\Http\JsonResponse;
 
 class InvoiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     */
-    public function index()
+    private InvoiceService $invoiceService;
+
+    public function __construct(InvoiceService $invoiceService)
     {
-        dd('Hello World');
+        $this->invoiceService = $invoiceService;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
-    public function store(Request $request)
+    public function index(): JsonResponse
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     */
-    public function destroy($id)
-    {
-        //
+        $invoices = $this->invoiceService->getAllInvoices();
+        return response()->json($invoices);
     }
 }
