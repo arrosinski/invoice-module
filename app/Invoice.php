@@ -25,4 +25,10 @@ class Invoice extends Model
     {
         return $this->belongsTo(Company::class, 'billed_company_id');
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'invoice_product_lines')
+            ->withPivot('quantity');
+    }
 }
