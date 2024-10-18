@@ -18,7 +18,12 @@ class EloquentInvoiceRepository implements InvoiceRepository
     public function findAll(): array
     {
         $invoices = InvoiceModel::with(['company', 'billedCompany', 'products'])
-            ->get(['number', 'date', 'due_date', 'company_id', 'billed_company_id']);
+            ->get(['id', 'number', 'date', 'due_date', 'company_id', 'billed_company_id']);
+
+        // Debugging statement to check if the products relationship is being loaded correctly
+        foreach ($invoices as $invoice) {
+            \Log::info('Invoice Products:', $invoice->products->toArray());
+        }
 
         return $invoices->map(function ($invoice) {
             $company = CompanyModel::find($invoice->company_id, ['name', 'street', 'city', 'zip', 'phone']);
@@ -47,13 +52,10 @@ class EloquentInvoiceRepository implements InvoiceRepository
             foreach ($invoice->products as $product) {
                 $quantity = $product->pivot->quantity;
                 $price = $product->price;
-                $total = $price * $quantity;
-
                 $products->addProduct(new ProductEntity(
                     $product->name,
                     $price,
-                    $quantity,
-                    $total
+                    $quantity
                 ));
             }
 
