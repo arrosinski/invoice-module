@@ -19,6 +19,36 @@ class InvoiceController extends Controller
     public function index(): JsonResponse
     {
         $invoices = $this->invoiceService->getAllInvoices();
-        return response()->json($invoices);
+        return response()->json(array_map(function($invoice) {
+            return [
+                'number' => $invoice->getNumber(),
+                'date' => $invoice->getDate()->format('Y-m-d'),
+                'dueDate' => $invoice->getDueDate()->format('Y-m-d'),
+                'company' => [
+                    'name' => $invoice->getCompany()->getName(),
+                    'street' => $invoice->getCompany()->getStreet(),
+                    'city' => $invoice->getCompany()->getCity(),
+                    'zip' => $invoice->getCompany()->getZip(),
+                    'phone' => $invoice->getCompany()->getPhone(),
+                ],
+                'billedCompany' => [
+                    'name' => $invoice->getBilledCompany()->getName(),
+                    'street' => $invoice->getBilledCompany()->getStreet(),
+                    'city' => $invoice->getBilledCompany()->getCity(),
+                    'zip' => $invoice->getBilledCompany()->getZip(),
+                    'phone' => $invoice->getBilledCompany()->getPhone(),
+                    'email' => $invoice->getBilledCompany()->getEmail(),
+                ],
+                'products' => array_map(function($product) {
+                    return [
+                        'name' => $product->getName(),
+                        'price' => $product->getPrice(),
+                        'quantity' => $product->getQuantity(),
+                        'total' => $product->getTotal(),
+                    ];
+                }, $invoice->getProducts()->getProducts()),
+                'totalPrice' => $invoice->getTotalPrice(),
+            ];
+        }, $invoices));
     }
 }

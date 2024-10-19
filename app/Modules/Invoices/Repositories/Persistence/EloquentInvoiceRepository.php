@@ -12,10 +12,18 @@ use App\Modules\Invoices\Entities\Invoice as InvoiceEntity;
 use App\Modules\Invoices\Entities\Product as ProductEntity;
 use App\Modules\Invoices\Entities\ProductCollection;
 use App\Modules\Invoices\Repositories\InvoiceRepository;
+use App\Modules\Invoices\Services\TotalPriceCountingService;
 use Illuminate\Support\Facades\Log;
 
 class EloquentInvoiceRepository implements InvoiceRepository
 {
+    private $totalPriceCountingService;
+
+    public function __construct(TotalPriceCountingService $totalPriceCountingService)
+    {
+        $this->totalPriceCountingService = $totalPriceCountingService;
+    }
+
     public function findAll(): array
     {
         $invoices = InvoiceModel::with(['company', 'billedCompany', 'products'])
@@ -55,13 +63,16 @@ class EloquentInvoiceRepository implements InvoiceRepository
                 ));
             }
 
+            $totalPrice = $this->totalPriceCountingService->calculateTotalPrice($products);
+
             return new InvoiceEntity(
                 $invoice->number,
                 new \DateTime($invoice->date),
                 new \DateTime($invoice->due_date),
                 $companyEntity,
                 $billedCompanyEntity,
-                $products
+                $products,
+                $totalPrice
             );
         })->toArray();
     }

@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Entities;
 
-class Company implements \JsonSerializable
+class Company
 {
-    private string $name;
-    private string $street;
-    private string $city;
-    private string $zip;
-    private string $phone;
+    private $name;
+    private $street;
+    private $city;
+    private $zip;
+    private $phone;
 
-    public function __construct(
-        string $name,
-        string $street,
-        string $city,
-        string $zip,
-        string $phone
-    ) {
+    public function __construct(string $name, string $street, string $city, string $zip, string $phone)
+    {
         $this->name = $name;
         $this->street = $street;
         $this->city = $city;
@@ -49,19 +44,5 @@ class Company implements \JsonSerializable
     public function getPhone(): string
     {
         return $this->phone;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'name' => $this->name,
-            'street' => $this->street,
-            'city' => $this->city,
-            'zip' => $this->zip,
-            'phone' => $this->phone,
-        ];
     }
 }
