@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'number',
         'date',
@@ -28,7 +30,7 @@ class Invoice extends Model
 
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'invoice_product_lines', 'invoice_id', 'product_id')
+        return $this->belongsToMany(Product::class, 'invoice_product_lines')
             ->withPivot('quantity');
     }
 }

@@ -12,6 +12,7 @@ use App\Modules\Invoices\Entities\Invoice as InvoiceEntity;
 use App\Modules\Invoices\Entities\Product as ProductEntity;
 use App\Modules\Invoices\Entities\ProductCollection;
 use App\Modules\Invoices\Repositories\InvoiceRepository;
+use Illuminate\Support\Facades\Log;
 
 class EloquentInvoiceRepository implements InvoiceRepository
 {
@@ -19,11 +20,6 @@ class EloquentInvoiceRepository implements InvoiceRepository
     {
         $invoices = InvoiceModel::with(['company', 'billedCompany', 'products'])
             ->get(['id', 'number', 'date', 'due_date', 'company_id', 'billed_company_id']);
-
-        // Debugging statement to check if the products relationship is being loaded correctly
-        foreach ($invoices as $invoice) {
-            \Log::info('Invoice Products:', $invoice->products->toArray());
-        }
 
         return $invoices->map(function ($invoice) {
             $company = CompanyModel::find($invoice->company_id, ['name', 'street', 'city', 'zip', 'phone']);
