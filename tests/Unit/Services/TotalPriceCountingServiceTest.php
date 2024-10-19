@@ -22,7 +22,7 @@ class TotalPriceCountingServiceTest extends TestCase
     {
         $products = new ProductCollection();
         $totalPrice = $this->service->calculateTotalPrice($products);
-        $this->assertEquals('0 USD', $totalPrice);
+        $this->assertEquals('$0.00', $totalPrice);
     }
 
     public function testCalculateTotalPriceWithSingleProduct(): void
@@ -30,7 +30,7 @@ class TotalPriceCountingServiceTest extends TestCase
         $products = new ProductCollection();
         $products->addProduct(new Product('Product 1', 100.0, 1));
         $totalPrice = $this->service->calculateTotalPrice($products);
-        $this->assertEquals('106.25 USD', $totalPrice);
+        $this->assertEquals('$106.25', $totalPrice);
     }
 
     public function testCalculateTotalPriceWithMultipleProducts(): void
@@ -39,6 +39,6 @@ class TotalPriceCountingServiceTest extends TestCase
         $products->addProduct(new Product('Product 1', 100.0, 1));
         $products->addProduct(new Product('Product 2', 50.0, 2));
         $totalPrice = $this->service->calculateTotalPrice($products);
-        $this->assertEquals('212.5 USD', $totalPrice);
+        $this->assertEquals('$212.50', $totalPrice);
     }
 }

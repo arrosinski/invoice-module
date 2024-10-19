@@ -10,7 +10,7 @@ class TotalPriceCountingService
 {
     private const SALES_TAX = 0.0625;
 
-    private const CURRENCY = 'USD';
+    private const CURRENCY = '$';
 
     public function calculateTotalPrice(ProductCollection $products): string
     {
@@ -19,6 +19,6 @@ class TotalPriceCountingService
             $totalPrice += $product->getTotal();
         }
 
-        return ($totalPrice * (1 + self::SALES_TAX)) . ' ' . self::CURRENCY;
+        return self::CURRENCY.number_format($totalPrice * (1 + self::SALES_TAX), 2);
     }
 }
