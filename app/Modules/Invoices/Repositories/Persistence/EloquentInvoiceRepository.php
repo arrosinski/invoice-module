@@ -29,7 +29,8 @@ class EloquentInvoiceRepository implements InvoiceRepository
     public function findById(UuidInterface $id): ?ApprovalInvoiceEntity
     {
         $invoiceModel = InvoiceModel::find($id->toString());
-        return $invoiceModel ? $this->mapToApprovalEntity($invoiceModel) : null;
+
+        return $invoiceModel ? $this->mapToApprovalInvoiceEntity($invoiceModel) : null;
     }
 
     public function findAll(): array
@@ -42,15 +43,11 @@ class EloquentInvoiceRepository implements InvoiceRepository
         })->toArray();
     }
 
-    public function save(InvoiceEntity $invoice): void
+    public function save(ApprovalInvoiceEntity $invoice): void
     {
-        $invoiceModel = InvoiceModel::find($invoice->getNumber()->toString());
-
+        $invoiceModel = InvoiceModel::find($invoice->getId()->toString());
         if ($invoiceModel) {
-            $invoiceModel->date = $invoice->getDate()->format('Y-m-d');
-            $invoiceModel->due_date = $invoice->getDueDate()->format('Y-m-d');
-            $invoiceModel->company_id = $invoice->getCompany()->getId();
-            $invoiceModel->billed_company_id = $invoice->getBilledCompany()->getId();
+            $invoiceModel->status = $invoice->getStatus();
         } else {
             $invoiceModel = new InvoiceModel();
             $invoiceModel->number = $invoice->getNumber()->toString();
@@ -58,6 +55,7 @@ class EloquentInvoiceRepository implements InvoiceRepository
             $invoiceModel->due_date = $invoice->getDueDate()->format('Y-m-d');
             $invoiceModel->company_id = $invoice->getCompany()->getId();
             $invoiceModel->billed_company_id = $invoice->getBilledCompany()->getId();
+            $invoiceModel->status = $invoice->getStatus();
         }
 
         $invoiceModel->save();
@@ -109,11 +107,12 @@ class EloquentInvoiceRepository implements InvoiceRepository
             $companyEntity,
             $billedCompanyEntity,
             $products,
-            $totalPrice
+            $totalPrice,
+            $invoiceModel->status
         );
     }
 
-    private function mapToApprovalEntity(InvoiceModel $invoiceModel): ApprovalInvoiceEntity
+    private function mapToApprovalInvoiceEntity(InvoiceModel $invoiceModel): ApprovalInvoiceEntity
     {
         $company = CompanyModel::find($invoiceModel->company_id, ['id', 'name', 'street', 'city', 'zip', 'phone']);
         $companyEntity = new CompanyEntity(
@@ -153,15 +152,15 @@ class EloquentInvoiceRepository implements InvoiceRepository
         $totalPrice = $this->totalPriceCountingService->calculateTotalPrice($products);
 
         return new ApprovalInvoiceEntity(
-            Uuid::fromString($invoiceModel->number),
+            Uuid::fromString($invoiceModel->id), // Use id
+            Uuid::fromString($invoiceModel->number), // Use number
             new \DateTime($invoiceModel->date),
             new \DateTime($invoiceModel->due_date),
             $companyEntity,
             $billedCompanyEntity,
             $products,
             $totalPrice,
-            $invoiceModel->status,
-            $invoiceModel->approval_status
+            $invoiceModel->status
         );
     }
 }

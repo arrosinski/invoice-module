@@ -11,6 +11,7 @@ class Invoice extends Model
     public $incrementing = false;
     protected $keyType = 'string';
     protected $fillable = [
+        'id',
         'number',
         'date',
         'due_date',

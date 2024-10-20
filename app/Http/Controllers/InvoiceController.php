@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Modules\Invoices\Services\InvoiceService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use LogicException;
 
 class InvoiceController extends Controller
 {
@@ -57,13 +59,27 @@ class InvoiceController extends Controller
 
     public function approve(Request $request): JsonResponse
     {
-        $this->invoiceService->approve($request->input('invoice_id'));
-        return response()->json(['status' => 'approved']);
+        try {
+            $this->invoiceService->approve($request->input('invoice_id'));
+
+            return response()->json(['status' => 'Status approved set sucessfully'], 200);
+        } catch (LogicException $e) {
+            return response()->json(['error' => 'Failed to approve invoice: '.$e->getMessage()], 400);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'An unexpected error occurred: '.$e->getMessage()], 500);
+        }
     }
 
     public function reject(Request $request): JsonResponse
     {
-        $this->invoiceService->reject($request->input('invoice_id'));
-        return response()->json(['status' => 'rejected']);
+        try {
+            $this->invoiceService->reject($request->input('invoice_id'));
+
+            return response()->json(['status' => 'Status rejected set successfully']);
+        } catch (LogicException $e) {
+            return response()->json(['error' => 'Failed to reject invoice: '.$e->getMessage()], 400);
+        } catch (Exception $e) {
+            return response()->json(['error' => 'An unexpected error occurred: '.$e->getMessage()], 500);
+        }
     }
 }
