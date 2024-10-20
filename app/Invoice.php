@@ -16,6 +16,7 @@ class Invoice extends Model
         'due_date',
         'company_id',
         'billed_company_id',
+        'status',
     ];
 
     public function company()

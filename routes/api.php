@@ -22,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('/invoices', InvoiceController::class);
+Route::post('/invoices/approve', [InvoiceController::class, 'approve']);
+Route::post('/invoices/reject', [InvoiceController::class, 'reject']);

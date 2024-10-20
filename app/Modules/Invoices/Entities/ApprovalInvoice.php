@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Invoices\Entities;
 
+use App\Domain\Enums\StatusEnum;
 use Ramsey\Uuid\UuidInterface;
 
-class Invoice
+class ApprovalInvoice
 {
     private UuidInterface $number;
     private \DateTime $date;
@@ -15,6 +16,8 @@ class Invoice
     private BilledCompany $billedCompany;
     private ProductCollection $products;
     private string $totalPrice;
+    private string $status;
+    private string $approvalStatus;
 
     public function __construct(
         UuidInterface $number,
@@ -23,7 +26,9 @@ class Invoice
         Company $company,
         BilledCompany $billedCompany,
         ProductCollection $products,
-        string $totalPrice
+        string $totalPrice,
+        string $status,
+        string $approvalStatus
     ) {
         $this->number = $number;
         $this->date = $date;
@@ -32,6 +37,8 @@ class Invoice
         $this->billedCompany = $billedCompany;
         $this->products = $products;
         $this->totalPrice = $totalPrice;
+        $this->status = $status;
+        $this->approvalStatus = $approvalStatus;
     }
 
     public function getNumber(): UuidInterface
@@ -67,5 +74,20 @@ class Invoice
     public function getTotalPrice(): string
     {
         return $this->totalPrice;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function getApprovalStatus(): string
+    {
+        return $this->approvalStatus;
+    }
+
+    public function setApprovalStatus(string $approvalStatus): void
+    {
+        $this->approvalStatus = $approvalStatus;
     }
 }

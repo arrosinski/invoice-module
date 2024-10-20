@@ -6,19 +6,32 @@ namespace App\Modules\Invoices\Entities;
 
 class Company
 {
-    private $name;
-    private $street;
-    private $city;
-    private $zip;
-    private $phone;
+    private string $id;
+    private string $name;
+    private string $street;
+    private string $city;
+    private string $zip;
+    private string $phone;
 
-    public function __construct(string $name, string $street, string $city, string $zip, string $phone)
-    {
+    public function __construct(
+        string $id,
+        string $name,
+        string $street,
+        string $city,
+        string $zip,
+        string $phone
+    ) {
+        $this->id = $id;
         $this->name = $name;
         $this->street = $street;
         $this->city = $city;
         $this->zip = $zip;
         $this->phone = $phone;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getName(): string

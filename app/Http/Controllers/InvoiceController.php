@@ -1,11 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Infrastructure\Controller;
 use App\Modules\Invoices\Services\InvoiceService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class InvoiceController extends Controller
 {
@@ -19,7 +21,8 @@ class InvoiceController extends Controller
     public function index(): JsonResponse
     {
         $invoices = $this->invoiceService->getAllInvoices();
-        return response()->json(array_map(function($invoice) {
+
+        return response()->json(array_map(function ($invoice) {
             return [
                 'number' => $invoice->getNumber(),
                 'date' => $invoice->getDate()->format('Y-m-d'),
@@ -39,7 +42,7 @@ class InvoiceController extends Controller
                     'phone' => $invoice->getBilledCompany()->getPhone(),
                     'email' => $invoice->getBilledCompany()->getEmail(),
                 ],
-                'products' => array_map(function($product) {
+                'products' => array_map(function ($product) {
                     return [
                         'name' => $product->getName(),
                         'price' => $product->getPrice(),
@@ -50,5 +53,17 @@ class InvoiceController extends Controller
                 'totalPrice' => $invoice->getTotalPrice(),
             ];
         }, $invoices));
+    }
+
+    public function approve(Request $request): JsonResponse
+    {
+        $this->invoiceService->approve($request->input('invoice_id'));
+        return response()->json(['status' => 'approved']);
+    }
+
+    public function reject(Request $request): JsonResponse
+    {
+        $this->invoiceService->reject($request->input('invoice_id'));
+        return response()->json(['status' => 'rejected']);
     }
 }
